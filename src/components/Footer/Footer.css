@@ -1,0 +1,266 @@
+/* ═══════════════════════════════════════════
+   Footer Section — الخاتمة
+   اللآلئ تتجمع حوالين الشعار تاني
+   CSS-only animation — zero Three.js cost
+   ═══════════════════════════════════════════ */
+
+.footer-section {
+  position: relative;
+  background: linear-gradient(180deg, #050F0D 0%, #020808 100%);
+  padding: 8rem 2rem 4rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ─── خلفية ضبابية ─── */
+.footer-bg-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 50%,
+    rgba(30, 90, 77, 0.08) 0%,
+    transparent 70%
+  );
+}
+
+/* ─── اللآلئ المدارية ─── */
+.footer-pearl-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* حلقة 1 */
+.orbit-ring-1 {
+  width: 300px;
+  height: 300px;
+  border: 1px solid rgba(212, 175, 106, 0.07);
+  animation: ring-pulse 6s ease-in-out infinite;
+}
+
+/* حلقة 2 */
+.orbit-ring-2 {
+  width: 480px;
+  height: 480px;
+  border: 1px solid rgba(212, 175, 106, 0.05);
+  animation: ring-pulse 8s ease-in-out infinite 1s;
+}
+
+/* حلقة 3 */
+.orbit-ring-3 {
+  width: 640px;
+  height: 640px;
+  border: 1px solid rgba(212, 175, 106, 0.03);
+  animation: ring-pulse 10s ease-in-out infinite 2s;
+}
+
+@keyframes ring-pulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1);   }
+  50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.02); }
+}
+
+/* اللؤلؤة المدارية */
+.pearl-orbiter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #F3ECDD, #D4AF6A 60%, #8B6F3A);
+  box-shadow: 0 0 8px rgba(212, 175, 106, 0.4);
+  transform-origin: center;
+}
+
+/* كل لؤلؤة بمسافة وسرعة مختلفة */
+.pearl-orbiter:nth-child(1) { animation: orbit-1 8s  linear infinite;       --r: 150px; }
+.pearl-orbiter:nth-child(2) { animation: orbit-2 12s linear infinite  -3s;  --r: 150px; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; }
+.pearl-orbiter:nth-child(3) { animation: orbit-3 10s linear infinite  -6s;  --r: 150px; width: 8px; height: 8px; margin: -4px 0 0 -4px; }
+.pearl-orbiter:nth-child(4) { animation: orbit-4 14s linear infinite  -2s;  --r: 240px; width: 12px; height: 12px; margin: -6px 0 0 -6px; }
+.pearl-orbiter:nth-child(5) { animation: orbit-5 9s  linear infinite  -7s;  --r: 240px; width: 6px; height: 6px; margin: -3px 0 0 -3px; }
+.pearl-orbiter:nth-child(6) { animation: orbit-6 16s linear infinite  -4s;  --r: 240px; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+.pearl-orbiter:nth-child(7) { animation: orbit-7 11s linear infinite  -8s;  --r: 320px; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; }
+.pearl-orbiter:nth-child(8) { animation: orbit-8 18s linear infinite  -1s;  --r: 320px; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; }
+
+/* 8 keyframes مختلفة — angles مختلفة لكل لؤلؤة */
+@keyframes orbit-1 {
+  from { transform: rotate(0deg)   translateX(150px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+}
+@keyframes orbit-2 {
+  from { transform: rotate(45deg)  translateX(150px) rotate(-45deg); }
+  to   { transform: rotate(405deg) translateX(150px) rotate(-405deg); }
+}
+@keyframes orbit-3 {
+  from { transform: rotate(180deg) translateX(150px) rotate(-180deg); }
+  to   { transform: rotate(540deg) translateX(150px) rotate(-540deg); }
+}
+@keyframes orbit-4 {
+  from { transform: rotate(30deg)  translateX(240px) rotate(-30deg); }
+  to   { transform: rotate(390deg) translateX(240px) rotate(-390deg); }
+}
+@keyframes orbit-5 {
+  from { transform: rotate(150deg) translateX(240px) rotate(-150deg); }
+  to   { transform: rotate(510deg) translateX(240px) rotate(-510deg); }
+}
+@keyframes orbit-6 {
+  from { transform: rotate(270deg) translateX(240px) rotate(-270deg); }
+  to   { transform: rotate(630deg) translateX(240px) rotate(-630deg); }
+}
+@keyframes orbit-7 {
+  from { transform: rotate(90deg)  translateX(320px) rotate(-90deg); }
+  to   { transform: rotate(450deg) translateX(320px) rotate(-450deg); }
+}
+@keyframes orbit-8 {
+  from { transform: rotate(220deg) translateX(320px) rotate(-220deg); }
+  to   { transform: rotate(580deg) translateX(320px) rotate(-580deg); }
+}
+
+/* ─── Brand Logo ─── */
+.footer-brand {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.footer-logo-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  box-shadow: 
+    0 0 20px rgba(212, 175, 106, 0.3),
+    0 4px 10px rgba(0,0,0,0.5);
+  margin-bottom: 1rem;
+  object-fit: cover;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-logo-text {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 7vw, 6rem);
+  color: var(--color-pearl);
+  line-height: 1.15;
+  text-shadow:
+    0 0 60px rgba(212, 175, 106, 0.15),
+    0 2px 30px rgba(0, 0, 0, 0.5);
+}
+
+.footer-logo-accent {
+  display: block;
+  color: var(--color-gold);
+  font-style: italic;
+  font-size: 0.85em;
+  text-shadow:
+    0 0 40px rgba(212, 175, 106, 0.4),
+    0 0 80px rgba(212, 175, 106, 0.15);
+}
+
+.footer-tagline {
+  font-family: var(--font-detail);
+  font-size: clamp(0.72rem, 1.4vw, 0.9rem);
+  letter-spacing: 0.4em;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 0.8rem;
+  display: block;
+}
+
+/* ─── Social Links ─── */
+.footer-socials {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-pearl-dim);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(212, 175, 106, 0.15);
+  border-radius: 30px;
+  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.footer-social-link:hover {
+  color: var(--color-gold);
+  border-color: rgba(212, 175, 106, 0.4);
+  box-shadow: 0 0 16px rgba(212, 175, 106, 0.1);
+}
+
+.social-icon { font-size: 1.1rem; }
+
+/* ─── Gold Divider ─── */
+.footer-divider {
+  width: 120px !important;
+  margin: 0 auto 2rem !important;
+}
+
+/* ─── Nav Links ─── */
+.footer-nav {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-nav-link {
+  color: var(--color-pearl-dim);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  letter-spacing: 0.05em;
+  transition: color 0.3s;
+}
+
+.footer-nav-link:hover { color: var(--color-gold); }
+
+/* ─── Copyright ─── */
+.footer-copyright {
+  font-family: var(--font-detail);
+  font-size: 0.72rem;
+  color: rgba(243, 236, 221, 0.25);
+  text-align: center;
+  letter-spacing: 0.08em;
+  position: relative;
+  z-index: 2;
+  line-height: 1.8;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+  .footer-section { padding: 6rem 1.5rem 3rem; }
+  .orbit-ring-2, .orbit-ring-3, .pearl-orbiter:nth-child(n+4) { display: none; }
+}
