@@ -66,3 +66,7 @@ npm run build
 * **Node.js Version:** 18 أو أعلى
 
 *لا يتطلب المشروع أي متغيرات بيئة (Environment Variables) خارجية أو قواعد بيانات للتسهيل الكلي في إدارة المحتوى وحفظ خصوصية الرسائل المباشرة عبر واتساب.*
+=======
+# Yasoo-Hand-Maid
+Yasoo Hand Maid
+
