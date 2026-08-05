@@ -184,12 +184,10 @@ export default function AdminDashboard({ onReturnToSite }) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // فتح نافذة تأكيد الحذف المخصصة
   const requestDelete = (product) => {
     setDeleteModalItem(product);
   };
 
-  // تنفيذ الحذف بعد التأكيد من النافذة المنبثقة المخصصة
   const confirmDelete = async () => {
     if (!deleteModalItem) return;
 
@@ -234,7 +232,7 @@ export default function AdminDashboard({ onReturnToSite }) {
       <div className="admin-login-wrapper">
         <div className="admin-login-card">
           <div className="admin-logo">
-            <span className="sparkle">✨</span>
+            <span className="sparkle"><i className="fa-solid fa-wand-magic-sparkles"></i></span>
             <h2>لوحة تحكم المنتجات</h2>
             <p>Yasso Hand Maid - الإدارة الخاصة</p>
           </div>
@@ -255,12 +253,12 @@ export default function AdminDashboard({ onReturnToSite }) {
             {loginError && <div className="login-error-msg">{loginError}</div>}
 
             <button type="submit" className="admin-btn primary-btn">
-              دخول لوحة التحكم 🔑
+              دخول لوحة التحكم <i className="fa-solid fa-key"></i>
             </button>
           </form>
 
           <button onClick={onReturnToSite} className="admin-btn text-btn">
-            ← الرجوع للموقع الرئيسي
+            <i className="fa-solid fa-arrow-right"></i> الرجوع للموقع الرئيسي
           </button>
         </div>
       </div>
@@ -274,14 +272,14 @@ export default function AdminDashboard({ onReturnToSite }) {
       <header className="admin-header">
         <div className="admin-header-title">
           <h1>لوحة إدارة المنتجات</h1>
-          <span className="badge-live">Live Sync 🟢</span>
+          <span className="badge-live">Live Sync <i className="fa-solid fa-circle text-success font-xs"></i></span>
         </div>
         <div className="admin-header-actions">
           <button onClick={onReturnToSite} className="admin-btn secondary-btn">
-            🌐 عرض الموقع
+            <i className="fa-solid fa-globe"></i> عرض الموقع
           </button>
           <button onClick={handleLogout} className="admin-btn danger-outline-btn">
-            🚪 خروج
+            <i className="fa-solid fa-right-from-bracket"></i> خروج
           </button>
         </div>
       </header>
@@ -298,7 +296,7 @@ export default function AdminDashboard({ onReturnToSite }) {
         <div className="custom-modal-backdrop" onClick={() => setDeleteModalItem(null)}>
           <div className="custom-modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="modal-icon-wrap danger">
-              <span>🗑️</span>
+              <i className="fa-solid fa-trash-can"></i>
             </div>
             <h3 className="modal-title">تأكيد حذف المنتج</h3>
             <p className="modal-desc">
@@ -321,7 +319,7 @@ export default function AdminDashboard({ onReturnToSite }) {
                 className="admin-btn danger-solid-btn"
                 disabled={loading}
               >
-                {loading ? 'جاري الحذف...' : 'نعم، تأكيد الحذف 🗑️'}
+                {loading ? 'جاري الحذف...' : <>نعم، تأكيد الحذف <i className="fa-solid fa-trash-can"></i></>}
               </button>
             </div>
           </div>
@@ -331,7 +329,13 @@ export default function AdminDashboard({ onReturnToSite }) {
       <div className="admin-main-grid">
         {/* قسم إضافة / تعديل منتج */}
         <section className="admin-card form-section">
-          <h2>{editingId ? '✏️ تعديل المنتج' : '➕ إضافة منتج جديد'}</h2>
+          <h2>
+            {editingId ? (
+              <><i className="fa-solid fa-pen-to-square"></i> تعديل المنتج</>
+            ) : (
+              <><i className="fa-solid fa-plus"></i> إضافة منتج جديد</>
+            )}
+          </h2>
 
           <form onSubmit={handleSubmit} className="product-form">
             <div className="form-group">
@@ -390,7 +394,7 @@ export default function AdminDashboard({ onReturnToSite }) {
                   id="product-img-file"
                 />
                 <label htmlFor="product-img-file" className="file-picker-label">
-                  📷 اختر صورة من جهازك
+                  <i className="fa-solid fa-camera"></i> اختر صورة من جهازك
                 </label>
                 <span className="or-divider">أو ضع رابط صورة مباشرة:</span>
                 <input
@@ -430,7 +434,11 @@ export default function AdminDashboard({ onReturnToSite }) {
               >
                 {loading || uploading
                   ? 'جاري الحفظ...'
-                  : editingId ? 'تحديث المنتج 💾' : 'إضافة المنتج للموقع 🚀'}
+                  : editingId ? (
+                    <>تحديث المنتج <i className="fa-solid fa-floppy-disk"></i></>
+                  ) : (
+                    <>إضافة المنتج للموقع <i className="fa-solid fa-paper-plane"></i></>
+                  )}
               </button>
 
               {editingId && (
@@ -449,7 +457,7 @@ export default function AdminDashboard({ onReturnToSite }) {
         {/* قسم عرض وإدارة المنتجات الحالية */}
         <section className="admin-card list-section">
           <div className="list-section-header">
-            <h2>📦 المنتجات المضافة ({filteredProducts.length})</h2>
+            <h2><i className="fa-solid fa-boxes-stacked"></i> المنتجات المضافة ({filteredProducts.length})</h2>
 
             <div className="filter-controls">
               <select
@@ -462,7 +470,7 @@ export default function AdminDashboard({ onReturnToSite }) {
                 <option value="cases">جراب اللحظة</option>
               </select>
               <button onClick={fetchProducts} className="admin-btn icon-btn" title="تحديث القائمة">
-                🔄
+                <i className="fa-solid fa-rotate-right"></i>
               </button>
             </div>
           </div>
@@ -489,7 +497,7 @@ export default function AdminDashboard({ onReturnToSite }) {
                     <h3>{prod.title}</h3>
                     <div className="prod-price-delivery">
                       <span className="prod-price">{prod.price} ج.م</span>
-                      {prod.delivery && <span className="prod-delivery">⏱️ {prod.delivery}</span>}
+                      {prod.delivery && <span className="prod-delivery"><i className="fa-solid fa-truck-fast"></i> {prod.delivery}</span>}
                     </div>
                     {prod.description && <p className="prod-desc">{prod.description}</p>}
 
@@ -498,13 +506,13 @@ export default function AdminDashboard({ onReturnToSite }) {
                         onClick={() => handleEdit(prod)}
                         className="admin-btn edit-btn"
                       >
-                        ✏️ تعديل
+                        <i className="fa-solid fa-pen-to-square"></i> تعديل
                       </button>
                       <button
                         onClick={() => requestDelete(prod)}
                         className="admin-btn delete-btn"
                       >
-                        🗑️ حذف
+                        <i className="fa-solid fa-trash-can"></i> حذف
                       </button>
                     </div>
                   </div>

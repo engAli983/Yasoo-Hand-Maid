@@ -90,7 +90,9 @@ function RoomCard({ room, onShowDesigns }) {
         <span className="room-subtitle-label">{room.titleEn}</span>
         
         <div className="room-meta">
-          <span className="room-delivery" style={{ borderColor: `${room.accent}33`, color: room.accent, backgroundColor: `${room.accent}12` }}>التسليم خلال {room.delivery}</span>
+          <span className="room-delivery" style={{ borderColor: `${room.accent}33`, color: room.accent, backgroundColor: `${room.accent}12` }}>
+            <i className="fa-solid fa-truck-fast"></i> التسليم خلال {room.delivery}
+          </span>
         </div>
 
         <p className="room-desc">{room.desc}</p>
@@ -102,7 +104,9 @@ function RoomCard({ room, onShowDesigns }) {
         <ul className="room-products" aria-label="أبرز التصاميم">
           {room.features.map((item, i) => (
             <li key={i} className="room-product-item">
-              <span className="product-bullet" style={{ color: room.accent }}>◇</span>
+              <span className="product-bullet" style={{ color: room.accent }}>
+                <i className="fa-solid fa-gem"></i>
+              </span>
               <span className="product-text">{item}</span>
               {i === 0 && <span className="badge-best-seller" style={{ backgroundColor: room.accent }}>الأكثر طلبًا</span>}
             </li>
@@ -126,7 +130,7 @@ function RoomCard({ room, onShowDesigns }) {
           onClick={() => onShowDesigns(room)}
           style={{ backgroundColor: room.accent, color: '#0d0b10' }}
         >
-          عرض المنتجات ✨
+          عرض المنتجات <i className="fa-solid fa-wand-magic-sparkles"></i>
         </button>
       </div>
     </article>
@@ -244,7 +248,7 @@ export default function Rooms() {
       {/* مؤشر السكرول الأفقي */}
       <div className="rooms-progress-hint" aria-hidden="true">
         <span>اسحبي للاستكشاف</span>
-        <span className="scroll-arrow-h">→</span>
+        <span className="scroll-arrow-h"><i className="fa-solid fa-arrow-left"></i></span>
       </div>
 
       {/* Modal */}

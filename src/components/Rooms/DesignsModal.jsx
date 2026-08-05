@@ -115,7 +115,7 @@ export default function DesignsModal({ isOpen, onClose, room }) {
               onClick={onClose}
               aria-label="إغلاق المعرض"
             >
-              ✕
+              <i className="fa-solid fa-xmark"></i>
             </button>
 
             {/* Header */}
@@ -132,12 +132,14 @@ export default function DesignsModal({ isOpen, onClose, room }) {
                 </div>
               ) : categoryProducts.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '60px 20px', color: '#a09aa8' }}>
-                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '10px' }}>✦</span>
+                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '10px' }}>
+                    <i className="fa-solid fa-wand-magic-sparkles"></i>
+                  </span>
                   <h4 style={{ color: '#d4af6a', fontSize: '1.2rem', marginBottom: '8px' }}>
                     لا يوجد منتجات مضافة في قسم ({room.title}) حتى الآن
                   </h4>
                   <p style={{ fontSize: '0.9rem', maxWidth: '400px', margin: '0 auto' }}>
-                    يمكن لصاحب الموقع الدخول للوحة التحكم ⚙️ وإضافة أول منتج وتحديد سعره وصورته ليظهر هنا فوراً!
+                    يمكن لصاحب الموقع الدخول للوحة التحكم وإضافة أول منتج وتحديد سعره وصورته ليظهر هنا فوراً!
                   </p>
                 </div>
               ) : (
@@ -177,7 +179,7 @@ export default function DesignsModal({ isOpen, onClose, room }) {
                         <p className="design-card-desc">{item.description}</p>
                         {item.delivery && (
                           <small style={{ color: '#d4af6a', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>
-                            ⏱️ مدة التنفيذ: {item.delivery}
+                            <i className="fa-solid fa-clock"></i> مدة التنفيذ: {item.delivery}
                           </small>
                         )}
                       </div>
@@ -216,7 +218,7 @@ export default function DesignsModal({ isOpen, onClose, room }) {
                     onClick={() => setSelectedImg(null)}
                     aria-label="إغلاق الصورة الكبيرة"
                   >
-                    ✕
+                    <i className="fa-solid fa-xmark"></i>
                   </button>
                   <img
                     className="lightbox-img"
