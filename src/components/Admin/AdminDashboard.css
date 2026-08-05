@@ -26,7 +26,16 @@
 }
 
 .admin-logo .sparkle {
-  font-size: 2rem;
+  font-size: 2.2rem;
+  color: #d4af6a;
+  display: inline-block;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 106, 0.6));
+  animation: floatSparkle 3s ease-in-out infinite;
+}
+
+@keyframes floatSparkle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(10deg); }
 }
 
 .admin-logo h2 {
@@ -87,7 +96,7 @@
   margin-bottom: 15px;
 }
 
-/* الأزرار العامة */
+/* الأزرار العامة والأيقونات */
 .admin-btn {
   padding: 12px 20px;
   border-radius: 10px;
@@ -101,6 +110,15 @@
   justify-content: center;
   gap: 8px;
   font-family: inherit;
+}
+
+.admin-btn i {
+  font-size: 0.95rem;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.admin-btn:hover i {
+  transform: scale(1.2);
 }
 
 .primary-btn {
@@ -197,9 +215,24 @@
   background: rgba(40, 167, 69, 0.15);
   color: #28a745;
   border: 1px solid rgba(40, 167, 69, 0.3);
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 20px;
   font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-live .fa-circle {
+  font-size: 0.55rem;
+  color: #28a745;
+  animation: pulseGreen 1.8s infinite;
+}
+
+@keyframes pulseGreen {
+  0% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.3); filter: drop-shadow(0 0 6px #28a745); }
+  100% { opacity: 0.3; transform: scale(0.8); }
 }
 
 .admin-header-actions {
@@ -235,6 +268,14 @@
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-card h2 i {
+  color: #d4af6a;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 106, 0.5));
 }
 
 /* نموذج المنتج */
@@ -266,7 +307,10 @@
 }
 
 .file-picker-label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 10px 15px;
   background: rgba(212, 175, 106, 0.15);
   color: #d4af6a;
@@ -279,6 +323,11 @@
 
 .file-picker-label:hover {
   background: rgba(212, 175, 106, 0.25);
+  transform: translateY(-1px);
+}
+
+.file-picker-label i {
+  font-size: 1rem;
 }
 
 .or-divider {
@@ -329,6 +378,10 @@
 .icon-btn {
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.08);
+}
+
+.icon-btn:hover i {
+  transform: rotate(180deg);
 }
 
 .products-admin-grid {
@@ -422,6 +475,14 @@
 .prod-delivery {
   font-size: 0.8rem;
   color: #a09aa8;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.prod-delivery i {
+  color: #d4af6a;
+  font-size: 0.75rem;
 }
 
 .prod-desc {
@@ -454,6 +515,10 @@
   color: #d4af6a;
 }
 
+.edit-btn i {
+  color: #d4af6a;
+}
+
 .delete-btn {
   background: rgba(220, 53, 69, 0.15);
   color: #ff6b6b;
@@ -463,6 +528,16 @@
 
 .delete-btn:hover {
   background: rgba(220, 53, 69, 0.3);
+  color: #ff4d4d;
+}
+
+.delete-btn i {
+  color: #ff6b6b;
+  transition: transform 0.2s ease;
+}
+
+.delete-btn:hover i {
+  transform: scale(1.2) rotate(-8deg);
 }
 
 .status-toast {
@@ -526,13 +601,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
 }
 
 .modal-icon-wrap.danger {
   background: rgba(220, 53, 69, 0.15);
   border: 1px solid rgba(220, 53, 69, 0.4);
-  color: #dc3545;
+}
+
+.modal-icon-wrap.danger i {
+  font-size: 2.2rem;
+  color: #ff4d4d;
+  filter: drop-shadow(0 0 10px rgba(255, 77, 77, 0.6));
+  animation: pulseTrash 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseTrash {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(-6deg); }
 }
 
 .modal-title {

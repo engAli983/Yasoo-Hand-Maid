@@ -54,12 +54,14 @@
   z-index: 10;
 }
 
-.designs-modal-close:hover {
-  background: var(--color-gold);
+.designs-modal-close i {
+  font-size: 1.3rem;
+  transition: transform 0.4s var(--ease-silk);
+}
+
+.designs-modal-close:hover i {
   color: var(--color-void);
-  border-color: var(--color-gold);
-  transform: rotate(90deg);
-  box-shadow: 0 0 15px rgba(212, 175, 106, 0.35);
+  transform: rotate(90deg) scale(1.1);
 }
 
 /* Header Area */
