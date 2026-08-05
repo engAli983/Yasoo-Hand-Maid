@@ -3,17 +3,17 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import DesignsModal from './DesignsModal';
 
-// استيراد الصور الحقيقية للأقسام الثلاثة الجديدة كأغلفة للكروت
-import contractCover from '../../assets/contract/contract_1.webp';
-import jewelCover from '../../assets/jewels/jewel_1.webp';
-import caseCover from '../../assets/cases/case_1.webp';
+// استيراد أغلفة الأقسام الثلاثة مباشرة من تخديم Supabase التلقائي
+const contractCover = 'https://uvsqokeqtpdbqskznhso.supabase.co/storage/v1/object/public/products/contract/contract_1.webp';
+const jewelCover = 'https://uvsqokeqtpdbqskznhso.supabase.co/storage/v1/object/public/products/jewels/jewel_1.webp';
+const caseCover = 'https://uvsqokeqtpdbqskznhso.supabase.co/storage/v1/object/public/products/cases/case_1.webp';
 
 import './Rooms.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /* ══════════════════════════════════════════
-   بيانات الأقسام الثلاثة (ليالي العقد، خزانة الجواهر، جراب اللحظة)
+   بيانات الأقسام الثلاثة الأساسية
    ══════════════════════════════════════════ */
 const ROOMS = [
   {
@@ -25,12 +25,11 @@ const ROOMS = [
     accent: '#D4AF6A',
     image: contractCover,
     delivery: '٣-٥ أيام',
-    products: [
+    features: [
       'مرايا كتب الكتاب بالورد الطبيعي',
-      'بوكيهات الورد الهاند ميد الفاخرة',
       'مناديل كتب الكتاب المطرزة باللؤلؤ',
-      'أقلام كتب الكتاب بالأسماء الحصرية',
-    ],
+      'بوكيهات الورد الهاند ميد الفاخرة'
+    ]
   },
   {
     id: 'jewels',
@@ -41,12 +40,11 @@ const ROOMS = [
     accent: '#4AA68A',
     image: jewelCover,
     delivery: '٢-٤ أيام',
-    products: [
-      'سلاسل هاند ميد مطلية بالذهب',
-      'خواتم وإكسسوارات زفاف بالخرز',
-      'أساور وقطع فنية للعروسين',
-      'إكسسوارات شعر مرصعة بالكريستال',
-    ],
+    features: [
+      'سلاسل وإكسسوارات زفاف بالخرز',
+      'خواتم وأساور هاند ميد مطلية بالذهب',
+      'مشط شعر العروس الملكي'
+    ]
   },
   {
     id: 'cases',
@@ -57,20 +55,18 @@ const ROOMS = [
     accent: '#C9A8D9',
     image: caseCover,
     delivery: '٢-٣ أيام',
-    products: [
+    features: [
       'جراب اللؤلؤ والذهب الفاخر',
-      'جراب كريستال ناعم ومميز',
-      'جراب الريزن والورد المجفف',
-      'تصميمات خاصة مخصصة بالطلب',
-    ],
-  },
+      'جراب الكريستال الناعم للموبايل',
+      'تصميمات هاند ميد مخصصة بالطلب'
+    ]
+  }
 ];
 
 /* ══════════════════════════════════════════
    Room Card Component
    ══════════════════════════════════════════ */
 function RoomCard({ room, onShowDesigns }) {
-  // توليد رابط الواتساب الحقيقي للقسم المحدد
   const waMessage = `أهلاً ياسو، عايزة أطلب تصميم من قسم ${room.title}`;
   const waLink = `https://wa.me/201066307580?text=${encodeURIComponent(waMessage)}`;
 
@@ -93,7 +89,6 @@ function RoomCard({ room, onShowDesigns }) {
         <h3 className="room-title">{room.title}</h3>
         <span className="room-subtitle-label">{room.titleEn}</span>
         
-        {/* تفاصيل التسليم فقط وبدون أسعار */}
         <div className="room-meta">
           <span className="room-delivery" style={{ borderColor: `${room.accent}33`, color: room.accent, backgroundColor: `${room.accent}12` }}>التسليم خلال {room.delivery}</span>
         </div>
@@ -104,11 +99,11 @@ function RoomCard({ room, onShowDesigns }) {
           style={{ background: `linear-gradient(90deg,transparent,${room.accent},transparent)` }}
         />
 
-        <ul className="room-products" aria-label="منتجات الغرفة">
-          {room.products.map((p, i) => (
+        <ul className="room-products" aria-label="أبرز التصاميم">
+          {room.features.map((item, i) => (
             <li key={i} className="room-product-item">
               <span className="product-bullet" style={{ color: room.accent }}>◇</span>
-              <span className="product-text">{p}</span>
+              <span className="product-text">{item}</span>
               {i === 0 && <span className="badge-best-seller" style={{ backgroundColor: room.accent }}>الأكثر طلبًا</span>}
             </li>
           ))}
@@ -128,10 +123,10 @@ function RoomCard({ room, onShowDesigns }) {
         </a>
         <button
           className="room-designs-btn"
-          style={{ borderColor: room.accent, color: room.accent }}
           onClick={() => onShowDesigns(room)}
+          style={{ backgroundColor: room.accent, color: '#0d0b10' }}
         >
-          شوفي كل التصاميم
+          عرض المنتجات ✨
         </button>
       </div>
     </article>
@@ -139,25 +134,15 @@ function RoomCard({ room, onShowDesigns }) {
 }
 
 /* ══════════════════════════════════════════
-   Rooms Section
+   Main Rooms Component
    ══════════════════════════════════════════ */
 export default function Rooms() {
-  const sectionRef  = useRef(null);
-  const wrapRef     = useRef(null);
-  const trackRef    = useRef(null);
+  const sectionRef = useRef(null);
+  const wrapRef = useRef(null);
+  const trackRef = useRef(null);
 
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = (room) => {
-    setSelectedRoom(room);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedRoom(null);
-  };
 
   useEffect(() => {
     const mm = gsap.matchMedia();
@@ -185,7 +170,6 @@ export default function Rooms() {
 
       /* ② horizontal scroll — desktop only */
       if (isDesktop && trackRef.current) {
-        // مسافة السكرول متجاوبة بـ function لتعاد حساباتها عند الريسايز
         const scrollDist = () => window.innerWidth * (ROOMS.length - 1);
 
         gsap.to(trackRef.current, {
@@ -226,9 +210,18 @@ export default function Rooms() {
     return () => mm.revert();
   }, []);
 
-  return (
-    <section id="rooms" className="rooms-section" ref={sectionRef}>
+  const handleShowDesigns = (room) => {
+    setSelectedRoom(room);
+    setIsModalOpen(true);
+  };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedRoom(null);
+  };
+
+  return (
+    <section id="rooms" className="rooms-section" ref={sectionRef} aria-label="أقسام المنتجات">
       {/* Header */}
       <div className="rooms-header">
         <span className="rooms-eyebrow">الأتيليه الزجاجي</span>
@@ -242,7 +235,7 @@ export default function Rooms() {
         <div className="rooms-track" ref={trackRef}>
           {ROOMS.map(room => (
             <div key={room.id} className="rooms-panel">
-              <RoomCard room={room} onShowDesigns={openModal} />
+              <RoomCard room={room} onShowDesigns={handleShowDesigns} />
             </div>
           ))}
         </div>
@@ -254,13 +247,12 @@ export default function Rooms() {
         <span className="scroll-arrow-h">→</span>
       </div>
 
-      {/* مودال تصاميم الغرفة */}
+      {/* Modal */}
       <DesignsModal
         isOpen={isModalOpen}
-        onClose={closeModal}
+        onClose={handleCloseModal}
         room={selectedRoom}
       />
-
     </section>
   );
 }

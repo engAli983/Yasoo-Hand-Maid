@@ -1,100 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../../utils/supabaseClient';
 import './DesignsModal.css';
-
-/* ══════════════════════════════════════════
-   استيراد الصور ديناميكياً من المجلدات بـ Vite
-   ══════════════════════════════════════════ */
-const contractGlob = import.meta.glob('../../assets/contract/*.webp', { eager: true });
-const sortedContractKeys = Object.keys(contractGlob).sort((a, b) => {
-  const numA = parseInt(a.match(/\d+/)?.[0] || '0', 10);
-  const numB = parseInt(b.match(/\d+/)?.[0] || '0', 10);
-  return numA - numB;
-});
-const contractImages = sortedContractKeys.map(key => contractGlob[key].default || contractGlob[key]);
-
-const jewelGlob = import.meta.glob('../../assets/jewels/*.webp', { eager: true });
-const sortedJewelKeys = Object.keys(jewelGlob).sort((a, b) => {
-  const numA = parseInt(a.match(/\d+/)?.[0] || '0', 10);
-  const numB = parseInt(b.match(/\d+/)?.[0] || '0', 10);
-  return numA - numB;
-});
-const jewelImages = sortedJewelKeys.map(key => jewelGlob[key].default || jewelGlob[key]);
-
-const caseGlob = import.meta.glob('../../assets/cases/*.webp', { eager: true });
-const sortedCaseKeys = Object.keys(caseGlob).sort((a, b) => {
-  const numA = parseInt(a.match(/\d+/)?.[0] || '0', 10);
-  const numB = parseInt(b.match(/\d+/)?.[0] || '0', 10);
-  return numA - numB;
-});
-const caseImages = sortedCaseKeys.map(key => caseGlob[key].default || caseGlob[key]);
-
-/* ══════════════════════════════════════════
-   بناء هيكل البيانات ديناميكياً
-   ══════════════════════════════════════════ */
-const contractTitles = [
-  "مرآة كتب كتاب محمود ونورهان",
-  "مرآة الأسماء الدائرية بالورد واللؤلؤ",
-  "منديل كتب كتاب محمود ومريم المطرز",
-  "بوكيه زفاف ملكي بالورد والريش",
-  "بوكيه العروسة الكلاسيكي باللؤلؤ",
-  "مرآة العروسة المزينة بالذهب واللؤلؤ",
-  "مرآة كتب كتاب دائرية كلاسيكية",
-  "بوكيه وصيفة العروس بالورد واللؤلؤ",
-  "بوكيه اللؤلؤ الأبيض الفاخر",
-  "لقطة مقربة لتطريز مرآة كتب الكتاب",
-  "مرآة محمود ونورهان - زاوية كاملة",
-  "مرآة العروسين باللؤلؤ والورد الأبيض"
-];
-
-const contractDesigns = contractImages.map((img, i) => ({
-  id: `contract-${i}`,
-  title: contractTitles[i] || `تصميم كتب كتاب مميز #${i + 1}`,
-  desc: "شغل يدوي فاخر مصمم بلمسات خاصة ومطرز باللؤلؤ",
-  img: img
-}));
-
-const jewelTitles = [
-  "عقد زفاف فاخر من اللؤلؤ",
-  "خاتم سلك الفضة المطرز باللؤلؤ",
-  "مشط شعر العروس الملكي بالورد واللؤلؤ",
-  "مروحة كتب الكتاب باللؤلؤ والريش الأبيض",
-  "مروحة الأسماء والخرز الكلاسيكية للكتب كتاب"
-];
-
-const jewelDesigns = jewelImages.map((img, i) => ({
-  id: `jewel-${i}`,
-  title: jewelTitles[i] || `إكسسوار زفاف راقي #${i + 1}`,
-  desc: "تفاصيل صغيرة لامعة تكتمل بها إطلالتك وتجعلها فريدة",
-  img: img
-}));
-
-const caseTitles = [
-  "جراب اللؤلؤ والذهب الفاخر"
-];
-
-const caseDesigns = caseImages.map((img, i) => ({
-  id: `case-${i}`,
-  title: caseTitles[i] || `جراب موبايل باللؤلؤ #${i + 1}`,
-  desc: "تصميم مرصع بالكامل بحبات اللؤلؤ الطبيعي والكريستال",
-  img: img
-}));
-
-const DESIGNS_DATA = {
-  contract: [
-    ...contractDesigns,
-    { id: 'c-ph-1', isPlaceholder: true, placeholderText: 'تصاميم مرايا ومناديل جديدة قريباً' }
-  ],
-  jewels: [
-    ...jewelDesigns,
-    { id: 'j-ph-1', isPlaceholder: true, placeholderText: 'سلاسل وإكسسوارات زفاف جديدة قريباً' }
-  ],
-  cases: [
-    ...caseDesigns,
-    { id: 'ca-ph-1', isPlaceholder: true, placeholderText: 'جراب كريستال ناعم قريباً' },
-    { id: 'ca-ph-2', isPlaceholder: true, placeholderText: 'جراب الورد المجفف بالريزن' }
-  ]
-};
 
 /* ══════════════════════════════════════════
    مكون تحميل الصور الانسيابي (Smooth Image Loader)
@@ -117,6 +24,33 @@ function SmoothImage({ src, alt, className }) {
 
 export default function DesignsModal({ isOpen, onClose, room }) {
   const [selectedImg, setSelectedImg] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // جلب المنتجات الحية من Supabase عند فتح النافذة
+  useEffect(() => {
+    if (isOpen) {
+      fetchLiveProducts();
+    }
+  }, [isOpen]);
+
+  const fetchLiveProducts = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!error && data) {
+        setProducts(data);
+      }
+    } catch (err) {
+      console.error('Error loading products from Supabase:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // إغلاق المودال عند الضغط على Escape
   useEffect(() => {
@@ -141,13 +75,15 @@ export default function DesignsModal({ isOpen, onClose, room }) {
     };
   }, [isOpen, onClose, selectedImg]);
 
-  const designs = room ? (DESIGNS_DATA[room.id] || []) : [];
+  // فلترة المنتجات حسب القسم المفتوح حالياً
+  const categoryProducts = room
+    ? products.filter(p => p.category === room.id)
+    : [];
 
   return (
     <AnimatePresence>
       {isOpen && room && (
         <div className="designs-modal-backdrop" onClick={onClose}>
-          {/* 3D Glass Door Open/Close Animation via Framer Motion */}
           <motion.div
             className="designs-modal-window"
             style={{ '--room-accent': room.accent }}
@@ -185,41 +121,70 @@ export default function DesignsModal({ isOpen, onClose, room }) {
             {/* Header */}
             <header className="designs-modal-header">
               <h3 className="designs-modal-title">{room.title}</h3>
-              <span className="designs-modal-subtitle">{room.titleEn} — معرض التصاميم</span>
+              <span className="designs-modal-subtitle">{room.titleEn} — معرض المنتجات</span>
             </header>
 
             {/* Grid Content */}
             <div className="designs-modal-content">
-              <div className="designs-grid">
-                {designs.map((item) => (
-                  <div
-                    key={item.id}
-                    className="design-item-card"
-                    onClick={() => !item.isPlaceholder && setSelectedImg(item)}
-                  >
-                    <div className="design-img-wrap">
-                      {item.isPlaceholder ? (
-                        <div className="design-img-placeholder">
-                          <span className="placeholder-icon">✦</span>
-                          <span className="placeholder-text">{item.placeholderText}</span>
-                        </div>
-                      ) : (
+              {loading ? (
+                <div style={{ textAlign: 'center', padding: '50px', color: '#a09aa8' }}>
+                  جاري جلب المنتجات من قاعدة البيانات...
+                </div>
+              ) : categoryProducts.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '60px 20px', color: '#a09aa8' }}>
+                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '10px' }}>✦</span>
+                  <h4 style={{ color: '#d4af6a', fontSize: '1.2rem', marginBottom: '8px' }}>
+                    لا يوجد منتجات مضافة في قسم ({room.title}) حتى الآن
+                  </h4>
+                  <p style={{ fontSize: '0.9rem', maxWidth: '400px', margin: '0 auto' }}>
+                    يمكن لصاحب الموقع الدخول للوحة التحكم ⚙️ وإضافة أول منتج وتحديد سعره وصورته ليظهر هنا فوراً!
+                  </p>
+                </div>
+              ) : (
+                <div className="designs-grid">
+                  {categoryProducts.map((item) => (
+                    <div
+                      key={item.id}
+                      className="design-item-card"
+                      onClick={() => setSelectedImg(item)}
+                    >
+                      <div className="design-img-wrap">
                         <SmoothImage
                           className="design-img"
-                          src={item.img}
+                          src={item.image_url}
                           alt={item.title}
                         />
-                      )}
-                    </div>
-                    {!item.isPlaceholder && (
+                        <span 
+                          style={{
+                            position: 'absolute',
+                            bottom: '10px',
+                            right: '10px',
+                            background: 'rgba(212, 175, 106, 0.95)',
+                            color: '#0d0b10',
+                            padding: '3px 10px',
+                            borderRadius: '12px',
+                            fontWeight: 'bold',
+                            fontSize: '0.85rem',
+                            boxShadow: '0 4px 10px rgba(0,0,0,0.5)',
+                            zIndex: 2
+                          }}
+                        >
+                          {item.price} ج.م
+                        </span>
+                      </div>
                       <div className="design-card-info">
                         <h4 className="design-card-title">{item.title}</h4>
-                        <p className="design-card-desc">{item.desc}</p>
+                        <p className="design-card-desc">{item.description}</p>
+                        {item.delivery && (
+                          <small style={{ color: '#d4af6a', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>
+                            ⏱️ مدة التنفيذ: {item.delivery}
+                          </small>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </motion.div>
 
@@ -255,10 +220,13 @@ export default function DesignsModal({ isOpen, onClose, room }) {
                   </button>
                   <img
                     className="lightbox-img"
-                    src={selectedImg.img}
+                    src={selectedImg.image_url}
                     alt={selectedImg.title}
                   />
                   <p className="lightbox-caption">{selectedImg.title}</p>
+                  <div style={{ color: '#d4af6a', fontWeight: 'bold', fontSize: '1.2rem', marginTop: '6px' }}>
+                    السعر: {selectedImg.price} جنيه
+                  </div>
                 </motion.div>
               </motion.div>
             )}
