@@ -24,6 +24,9 @@ export default function AdminDashboard({ onReturnToSite }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
 
+  // حالة مودال الحذف المخصص
+  const [deleteModalItem, setDeleteModalItem] = useState(null);
+
   // حالات التحميل ورسائل التنبيه
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -104,8 +107,7 @@ export default function AdminDashboard({ onReturnToSite }) {
 
       if (uploadError) {
         console.warn('Storage upload warning:', uploadError);
-        // في حال لم يكن الـ bucket جاهزاً كـ public storage، نرجع خطأ واضح
-        throw new Error('تعذر رفع الصورة للتخزين. تأكد من إنشاء Public Bucket باسم "products" في Supabase.');
+        throw new Error('تعذر رفع الصورة للتخزين. تأكد من إعداد المجلد باسم "products".');
       }
 
       const { data: publicUrlData } = supabase.storage
@@ -182,18 +184,25 @@ export default function AdminDashboard({ onReturnToSite }) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleDelete = async (id, productTitle) => {
-    if (!window.confirm(`هل أنت تأكد من رغبتك في حذف "${productTitle}"؟`)) return;
+  // فتح نافذة تأكيد الحذف المخصصة
+  const requestDelete = (product) => {
+    setDeleteModalItem(product);
+  };
+
+  // تنفيذ الحذف بعد التأكيد من النافذة المنبثقة المخصصة
+  const confirmDelete = async () => {
+    if (!deleteModalItem) return;
 
     setLoading(true);
     try {
       const { error } = await supabase
         .from('products')
         .delete()
-        .eq('id', id);
+        .eq('id', deleteModalItem.id);
 
       if (error) throw error;
-      showMessage('success', 'تم حذف المنتج بنجاح.');
+      showMessage('success', `تم حذف "${deleteModalItem.title}" بنجاح.`);
+      setDeleteModalItem(null);
       fetchProducts();
     } catch (err) {
       console.error('Delete error:', err);
@@ -281,6 +290,41 @@ export default function AdminDashboard({ onReturnToSite }) {
       {statusMessage.text && (
         <div className={`status-toast ${statusMessage.type}`}>
           {statusMessage.text}
+        </div>
+      )}
+
+      {/* نافذة منبثقة مخصصة لتأكيد الحذف (Custom Delete Modal) */}
+      {deleteModalItem && (
+        <div className="custom-modal-backdrop" onClick={() => setDeleteModalItem(null)}>
+          <div className="custom-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-icon-wrap danger">
+              <span>🗑️</span>
+            </div>
+            <h3 className="modal-title">تأكيد حذف المنتج</h3>
+            <p className="modal-desc">
+              هل أنت تأكد من رغبتك في حذف <strong>"{deleteModalItem.title}"</strong>؟
+              <br />
+              <small style={{ color: '#a09aa8', marginTop: '6px', display: 'block' }}>
+                لن يمكنك استعادة هذا المنتج بعد الحذف.
+              </small>
+            </p>
+
+            <div className="custom-modal-actions">
+              <button
+                onClick={() => setDeleteModalItem(null)}
+                className="admin-btn secondary-btn"
+              >
+                إلغاء
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="admin-btn danger-solid-btn"
+                disabled={loading}
+              >
+                {loading ? 'جاري الحذف...' : 'نعم، تأكيد الحذف 🗑️'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -457,7 +501,7 @@ export default function AdminDashboard({ onReturnToSite }) {
                         ✏️ تعديل
                       </button>
                       <button
-                        onClick={() => handleDelete(prod.id, prod.title)}
+                        onClick={() => requestDelete(prod)}
                         className="admin-btn delete-btn"
                       >
                         🗑️ حذف
